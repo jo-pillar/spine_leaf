@@ -19,7 +19,7 @@
 
 /*****************************************************************************
 
-  sender.h - This is the interface file for the synchronous process "sender".
+  host.h - This file defines a SystemC structure "host".
 
   Original Author: Rashmi Goswami, Synopsys, Inc.
 
@@ -34,22 +34,35 @@
   Description of Modification:
 
  *****************************************************************************/
+#ifndef HOSt_H_INCLUDED
+#define HOST_H_INCLUDED
 
-#ifndef SENDER_H_INCLUDED
-#define SENDER_H_INCLUDED
-  
 #include "systemc.h"
 #include "pkt.h"
+struct host: sc_module {
+  sc_in<pkt> pkt_in;  
+  sc_in<sc_int<4> > sink_id;  //本机ID等于sourceid
+  int first;
 
-struct sender: sc_module {
   sc_out<pkt> pkt_out; 
-  sc_in<sc_int<4> > source_id;       
+  sc_in<sc_int<4> > source_id;      //发送者id
   sc_in_clk CLK;
 
-  SC_CTOR(sender)
-    {
-      SC_CTHREAD(entry, CLK.pos()); 
-     }  
-  void entry();
+  SC_CTOR(host) {
+      SC_METHOD(receiver); 
+      dont_initialize();
+      sensitive << pkt_in;
+      first = 1;
+      SC_CTHREAD(sender, CLK.pos()); 
+
+    }  
+ void receiver();
+ void sender();
 };
-#endif // SENDER_H_INCLUDED
+
+
+
+
+
+
+#endif // HOST_H_INCLUDED

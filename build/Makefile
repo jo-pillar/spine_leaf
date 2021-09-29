@@ -51,7 +51,7 @@ EQUALS = =
 CMAKE_SOURCE_DIR = /home/jo_pillar/studydirectory/pkt_switch
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/jo_pillar/studydirectory/pkt_switch
+CMAKE_BINARY_DIR = /home/jo_pillar/studydirectory/pkt_switch/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -80,9 +80,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/jo_pillar/studydirectory/pkt_switch/CMakeFiles /home/jo_pillar/studydirectory/pkt_switch/CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/jo_pillar/studydirectory/pkt_switch/build/CMakeFiles /home/jo_pillar/studydirectory/pkt_switch/build/CMakeFiles/progress.marks
 	$(MAKE) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/jo_pillar/studydirectory/pkt_switch/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/jo_pillar/studydirectory/pkt_switch/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -149,6 +149,33 @@ fifo.s: fifo.cpp.s
 fifo.cpp.s:
 	$(MAKE) -f CMakeFiles/pkt_switch.dir/build.make CMakeFiles/pkt_switch.dir/fifo.cpp.s
 .PHONY : fifo.cpp.s
+
+host.o: host.cpp.o
+
+.PHONY : host.o
+
+# target to build an object file
+host.cpp.o:
+	$(MAKE) -f CMakeFiles/pkt_switch.dir/build.make CMakeFiles/pkt_switch.dir/host.cpp.o
+.PHONY : host.cpp.o
+
+host.i: host.cpp.i
+
+.PHONY : host.i
+
+# target to preprocess a source file
+host.cpp.i:
+	$(MAKE) -f CMakeFiles/pkt_switch.dir/build.make CMakeFiles/pkt_switch.dir/host.cpp.i
+.PHONY : host.cpp.i
+
+host.s: host.cpp.s
+
+.PHONY : host.s
+
+# target to generate assembly for a file
+host.cpp.s:
+	$(MAKE) -f CMakeFiles/pkt_switch.dir/build.make CMakeFiles/pkt_switch.dir/host.cpp.s
+.PHONY : host.cpp.s
 
 main.o: main.cpp.o
 
@@ -297,6 +324,9 @@ help:
 	@echo "... fifo.o"
 	@echo "... fifo.i"
 	@echo "... fifo.s"
+	@echo "... host.o"
+	@echo "... host.i"
+	@echo "... host.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

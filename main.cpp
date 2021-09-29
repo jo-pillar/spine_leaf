@@ -42,12 +42,16 @@
 #include "sender.h"
 #include "receiver.h"
 #include "switch.h"
+#include "host.h"
 
 
 int
 sc_main(int, char *[])
 {
-  sc_signal<pkt> pkt_in0;
+  sc_signal<pkt> pkt_in[4];
+ 
+
+ /* sc_signal<pkt> pkt_in0;*/
   sc_signal<pkt> pkt_in1;
   sc_signal<pkt> pkt_in2;
   sc_signal<pkt> pkt_in3;
@@ -67,11 +71,17 @@ sc_main(int, char *[])
   // Note that modules can be connected by hooking up ports 
   // to signals by name or by using a positional notation
 
-  sender sender0("SENDER0");
+  /*sender sender0("SENDER0");
   // hooking up signals to ports by name
-  sender0.pkt_out(pkt_in0);
+  sender0.pkt_out(pkt_in[0]);
   sender0.source_id(id0);
-  sender0.CLK(clock1);
+  sender0.CLK(clock1);*/
+  host host0("HOST0");
+  host0.pkt_out(pkt_in[0]);
+  host0.source_id(id0);
+  host0.CLK(clock1);
+    host0.pkt_in(pkt_out0);
+  host0.sink_id(id0);
 
   sender sender1("SENDER1");
   // hooking up signals to ports by position
@@ -95,7 +105,7 @@ sc_main(int, char *[])
   mcast_pkt_switch switch1("SWITCH");
   // hooking up signals to ports by name
   switch1.switch_cntrl(switch_cntrl);
-  switch1.in0(pkt_in0);
+  switch1.in0(pkt_in[0]);
   switch1.in1(pkt_in1);
   switch1.in2(pkt_in2);
   switch1.in3(pkt_in3);
