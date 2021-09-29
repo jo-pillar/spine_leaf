@@ -52,9 +52,9 @@ void host:: receiver()
 	temp_val = pkt_in.read();
 	cout << "                                  .........................." << endl;
 	cout << "                                  New Packet Received" << endl;
-	cout << "                                  Receiver ID: " << (int)sink_id.read() + 1 << endl;
+	cout << "                                  Receiver ID: " << (int)id.read() + 1 << endl;
 	cout << "                                  Packet Value: " << (int)temp_val.data << endl;
-	cout << "                                  Sender ID: " << (int)temp_val.id + 1 << endl;
+	cout << "                                  Sender ID: " << (int)temp_val.id  << endl;//取消加一
 	cout << "                                  .........................." << endl;
    } 
 
@@ -62,7 +62,7 @@ void host:: receiver()
 void host:: sender()
 {
    pkt pkt_data;
-   sc_uint<4> dest;
+   sc_uint<4> dest;//目标ID
 
    srand((unsigned)time(NULL));
    wait(8);
@@ -72,28 +72,31 @@ void host:: sender()
        pkt_data.data = rand()%255;
 
        ////stamp the sender's id
-       pkt_data.id = source_id.read();
+       pkt_data.id = id.read();
 
       
        /////send it to 1 or more(<=4) destinations//////////////
        dest = rand()%15 + 1;
-       pkt_data.dest0 = dest[0];//dest 1~15
-       pkt_data.dest1 = dest[1]; 
-       pkt_data.dest2 = dest[2];
-       pkt_data.dest3 = dest[3];
+       for(int i=0;i<4;i++)
+       {
+         pkt_data.dest[i]=dest[i];
+
+       }
+     
 
        pkt_out.write(pkt_data);
 
         cout << ".........................." << endl;
 	cout << "New Packet Sent" << endl;
 	cout << "Destination Addresses: ";
-        if (dest[0]) cout << 1 << " " ;
-        if (dest[1]) cout << 2 << " ";
-        if (dest[2]) cout << 3 << " ";
-	if (dest[3]) cout << 4 << " ";
+  for(int i=0;i<10;i++)
+       {
+        if (dest[i]) cout << i+1 << " " ;
+
+       }
         cout << endl;
 	cout << "Packet Value: " << (int)pkt_data.data << endl;
-	cout << "Sender ID: " << (int)source_id.read() + 1 << endl;
+	cout << "Sender ID: " << (int)id.read()  << endl;//取消加一
 	cout << ".........................." << endl;      
        
        wait(); 

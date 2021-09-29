@@ -34,18 +34,17 @@
   Description of Modification:
 
  *****************************************************************************/
-#ifndef HOSt_H_INCLUDED
+#ifndef HOST_H_INCLUDED
 #define HOST_H_INCLUDED
 
 #include "systemc.h"
 #include "pkt.h"
 struct host: sc_module {
   sc_in<pkt> pkt_in;  
-  sc_in<sc_int<4> > sink_id;  //本机ID等于sourceid
+  sc_in<sc_int<4> > id;  //本机ID等于sourceid
   int first;
 
   sc_out<pkt> pkt_out; 
-  sc_in<sc_int<4> > source_id;      //发送者id
   sc_in_clk CLK;
 
   SC_CTOR(host) {
