@@ -41,8 +41,8 @@
 
 struct pkt {
        sc_int<8> data;
-       sc_int<10> id;
-       bool dest[10];
+       sc_int<4> id;//发送者id [2][1][1] [core_id][leaf_id][host_id]
+       bool dest[4];
 
        inline bool operator == (const pkt& rhs) const
    {
@@ -70,7 +70,7 @@ void
   sc_trace( tf, a.data, name + ".data" );
   sc_trace( tf, a.id, name + ".id" );
     sc_trace( tf, a.dest, name + ".dest0" );
-  for (int i = 0; i < 10; i++)
+  for (int i = 0; i < 4; i++)
   {
     std::string str =std:: to_string(i);
      sc_trace( tf, a.dest[i], name + ".dest"+str );
