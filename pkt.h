@@ -41,15 +41,12 @@
 
 struct pkt {
        sc_int<8> data;
-       sc_int<4> id;
-       bool dest0;
-       bool dest1;
-       bool dest2;
-       bool dest3;
+       sc_int<10> id;
+       bool dest[10];
 
        inline bool operator == (const pkt& rhs) const
    {
-     return (rhs.data == data && rhs.id == id && rhs.dest0 == dest0 && rhs.dest1 == dest1 && rhs.dest2 == dest2 && rhs.dest3 == dest3);
+     return (rhs.data == data && rhs.id == id &&rhs.dest==dest);
    }
 
 };
@@ -72,9 +69,12 @@ void
 {
   sc_trace( tf, a.data, name + ".data" );
   sc_trace( tf, a.id, name + ".id" );
-  sc_trace( tf, a.dest0, name + ".dest0" );
-  sc_trace( tf, a.dest1, name + ".dest1" );
-  sc_trace( tf, a.dest2, name + ".dest2" );
-  sc_trace( tf, a.dest3, name + ".dest3" );
+    sc_trace( tf, a.dest, name + ".dest0" );
+  for (int i = 0; i < 10; i++)
+  {
+    std::string str =std:: to_string(i);
+     sc_trace( tf, a.dest[i], name + ".dest"+str );
+  }
+  
 }
 #endif // PKT_H_INCLUDED
