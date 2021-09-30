@@ -12,7 +12,7 @@ struct leaf: sc_module {
     sc_out<pkt>  out0;//core端口
     sc_out<pkt>  out1;//host0端口
     sc_out<pkt>  out2;//host1端口
-    sc_in<int<3>> ieaf_id// [2][1] [core_id][leaf_id]
+    sc_in<int<3>> leaf_id// [2][1] [core_id][leaf_id]
 
 
     SC_CTOR(mcast_pkt_switch) 
