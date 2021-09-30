@@ -47,7 +47,7 @@ struct switch_reg {
 // constructor
    switch_reg()    
     {
-      free = true;
+      free = true;//2][1]
     }
 };
 
