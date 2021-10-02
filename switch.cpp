@@ -67,6 +67,10 @@ void mcast_pkt_switch :: entry()
   fifo q1_out;
   fifo q2_out;
   fifo q3_out;
+  bool zero[2]={false, false};
+   bool one[2]={false, true};
+    bool two[2]={true, false};
+     bool three[2]={true, true};
 
   // FILE *result;
 
@@ -190,30 +194,28 @@ void mcast_pkt_switch :: entry()
 	    R3 = temp;
 
 	    /////write the register values to output fifos////////////
-	    if ((!R0.free) && (R0.val.dest0) && (!q0_out.full))
+	    if ((!R0.free) && (R0.val.dest==zero) && (!q0_out.full))
 	      {
 		q0_out.pkt_in(R0.val); 
-		R0.val.dest0 = false;
-		if (!(R0.val.dest0|R0.val.dest1|R0.val.dest2|R0.val.dest3)) R0.free = true;
+R0.free = true;
 	      }
 
-	    if ((!R1.free) && (R1.val.dest1) && (!q1_out.full))
+	    if ((!R1.free) && (R1.val.dest==one) && (!q1_out.full))
 	      {
 		q1_out.pkt_in(R1.val);
-		R1.val.dest1 = false;
-		if (!(R1.val.dest1|R1.val.dest1|R1.val.dest2|R1.val.dest3)) R1.free = true;
+
+	 R1.free = true;
 	      }
-	    if ((!R2.free) && (R2.val.dest2) && (!q2_out.full))
+	    if ((!R2.free) && (R2.val.dest==two) && (!q2_out.full))
 	      {
 		q2_out.pkt_in(R2.val);
-		R2.val.dest2 = false;
-		if (!(R2.val.dest2|R2.val.dest1|R2.val.dest2|R2.val.dest3)) R2.free = true;
+
+ R2.free = true;
 	      }
-	    if ((!R3.free) && (R3.val.dest3) && (!q3_out.full))
+	    if ((!R3.free) && (R3.val.dest==three) && (!q3_out.full))
 	      {
 		q3_out.pkt_in(R3.val);
-		R3.val.dest3 = false;
-		if (!(R3.val.dest3|R3.val.dest1|R3.val.dest2|R3.val.dest3)) R3.free = true;
+R3.free = true;
 	      }
 
 	    /////write the packets out//////////////////////////////////    

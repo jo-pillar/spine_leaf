@@ -59,10 +59,7 @@ void sender:: entry()
       
        /////send it to 1 or more(<=4) destinations//////////////
        dest = rand()%15 + 1;
-       pkt_data.dest0 = dest[0];//dest 1~15
-       pkt_data.dest1 = dest[1]; 
-       pkt_data.dest2 = dest[2];
-       pkt_data.dest3 = dest[3];
+       pkt_data.id==dest;
 
        pkt_out.write(pkt_data);
 

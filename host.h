@@ -40,6 +40,7 @@
 #include "systemc.h"
 #include "pkt.h"
 struct host: sc_module {
+  const int i;
   sc_in<pkt> pkt_in;  
   sc_in<sc_int<4> > id;  //本机ID等于sourceid
   int first;
@@ -47,7 +48,10 @@ struct host: sc_module {
   sc_out<pkt> pkt_out; 
   sc_in_clk CLK;
 
-  SC_CTOR(host) {
+  SC_CTOR(host);
+  host(sc_module_name name,int i):
+  sc_module(name),i(i)
+   {
       SC_METHOD(receiver); 
       dont_initialize();
       sensitive << pkt_in;

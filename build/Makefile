@@ -258,6 +258,33 @@ sender.cpp.s:
 	$(MAKE) -f CMakeFiles/pkt_switch.dir/build.make CMakeFiles/pkt_switch.dir/sender.cpp.s
 .PHONY : sender.cpp.s
 
+spine.o: spine.cpp.o
+
+.PHONY : spine.o
+
+# target to build an object file
+spine.cpp.o:
+	$(MAKE) -f CMakeFiles/pkt_switch.dir/build.make CMakeFiles/pkt_switch.dir/spine.cpp.o
+.PHONY : spine.cpp.o
+
+spine.i: spine.cpp.i
+
+.PHONY : spine.i
+
+# target to preprocess a source file
+spine.cpp.i:
+	$(MAKE) -f CMakeFiles/pkt_switch.dir/build.make CMakeFiles/pkt_switch.dir/spine.cpp.i
+.PHONY : spine.cpp.i
+
+spine.s: spine.cpp.s
+
+.PHONY : spine.s
+
+# target to generate assembly for a file
+spine.cpp.s:
+	$(MAKE) -f CMakeFiles/pkt_switch.dir/build.make CMakeFiles/pkt_switch.dir/spine.cpp.s
+.PHONY : spine.cpp.s
+
 switch.o: switch.cpp.o
 
 .PHONY : switch.o
@@ -336,6 +363,9 @@ help:
 	@echo "... sender.o"
 	@echo "... sender.i"
 	@echo "... sender.s"
+	@echo "... spine.o"
+	@echo "... spine.i"
+	@echo "... spine.s"
 	@echo "... switch.o"
 	@echo "... switch.i"
 	@echo "... switch.s"

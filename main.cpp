@@ -43,6 +43,9 @@
 #include "receiver.h"
 #include "switch.h"
 #include "host.h"
+#include "leaf.h"
+#include "spine.h"
+
 
 
 int
@@ -76,26 +79,35 @@ sc_main(int, char *[])
   sender0.pkt_out(pkt_in[0]);
   sender0.source_id(id0);
   sender0.CLK(clock1);*/
+ 
+  
   host host0("HOST0");
   host0.pkt_out(pkt_in[0]);
-  host0.source_id(id0);
+  host0.id(id0);
   host0.CLK(clock1);
-    host0.pkt_in(pkt_out0);
-  host0.sink_id(id0);
+  
 
-  sender sender1("SENDER1");
-  // hooking up signals to ports by position
-  sender1(pkt_in1, id1, clock1);
 
-  sender sender2("SENDER2");
-  // hooking up signals to ports by name
-  sender2.pkt_out(pkt_in2);
-  sender2.source_id(id2);
-  sender2.CLK(clock1);
+  host host1("HOST1");
+  host0.pkt_out(pkt_in[1]);
+  host0.id(id0);
+  host0.CLK(clock1);
 
-  sender sender3("SENDER3");
-  // hooking up signals to ports by position
-  sender3( pkt_in3, id3, clock1 );
+    
+    host host2("HOST2");
+  host0.pkt_out(pkt_in[2]);
+  host0.id(id2);
+  host0.CLK(clock1);
+
+    
+  host host3("HOST3");
+  host0.pkt_out(pkt_in[3]);
+  host0.id(id3);
+  host0.CLK(clock1);
+leaf  leaf0("leaf0");
+leaf0.in0()
+
+
   
   switch_clk switch_clk1("SWITCH_CLK");
   // hooking up signals to ports by name

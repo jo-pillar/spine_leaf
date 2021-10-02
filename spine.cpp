@@ -38,12 +38,12 @@
 
 #include "systemc.h"
 #include "pkt.h"
-#include "leaf.h"
+#include "spine.h"
 #include "fifo.h"
 #include "switch_reg.h"
 #define SIM_NUM 500
 
-void leaf :: entry()
+void spine :: entry()
 {
   wait();
 
@@ -123,7 +123,7 @@ void leaf :: entry()
   cout << "  from one port to another in a pipelined fashion, resolving output contention " << endl;
   cout << "  and handling multicast switch efficiently." << endl << endl;
  */
-  wait();
+ wait();
   // functionality
   while( sim_count++ < SIM_NUM )
     { 
@@ -182,7 +182,7 @@ void leaf :: entry()
 
 	    /////write the register values to output fifos////////////
         //R0
-        leafflag=(leafid[0]==R0.val.id[0])&&(leafid[1]==R0.val.id[1])&&(leafid[2]==R0.val.id[2])
+        leafflag=(leafid[0]==R0.val.id[0])&&(leafid[1]==R0.val.id[1])&&(leafid[2]==R0.val.id[2]);
         hostflag=R0.val.id[3];
 
 	    if ((!R0.free) && (!leafflag) && (!q0_out.full))// 当r0有包且是发送到第0个端口且q0栈不满。解决一个逻辑 什么时候写道R0端口

@@ -18,5 +18,7 @@ add_executable (pkt_switch main.cpp
                            receiver.h
                            receiver.cpp
                            host.h
-                           host.cpp)
+                           host.cpp
+                           spine.h
+                           spine.cpp)
 target_link_libraries(pkt_switch SystemC::systemc)
