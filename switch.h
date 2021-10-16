@@ -40,29 +40,39 @@
 
 #include "systemc.h"
 #include "pkt.h"
+#include<vector>
 
+
+
+using std::vector;
 struct mcast_pkt_switch : sc_module {
 
     sc_in<bool>  switch_cntrl;
-    sc_in<pkt>  in0;
-    sc_in<pkt>  in1;
-    sc_in<pkt>  in2;
-    sc_in<pkt>  in3;
+vector<sc_in<pkt>*> in_vec;//输出端口容器
+vector<sc_out<pkt>*> out_vec;//输入端口容器
 
-    sc_out<pkt>  out0;
-    sc_out<pkt>  out1;
-    sc_out<pkt>  out2;
-    sc_out<pkt>  out3;   
+
+
 
     SC_CTOR(mcast_pkt_switch) 
      {
+       for (int i = 0; i < SPINE_NUM; i++)
+{
+  sc_in<pkt> *in_temp=new sc_in<pkt>;
+  sc_out<pkt> *out_temp=new sc_out<pkt>;
+
+  in_vec.push_back(in_temp);
+  out_vec.push_back(out_temp);
+  }
+
       SC_THREAD(entry);
-      sensitive << in0;
-      sensitive << in1;
-      sensitive << in2;
-      sensitive << in3;
+      for (int i = 0; i < SPINE_NUM; i++)
+      {
+        sensitive<<*in_vec[i];
+      }
       sensitive << switch_cntrl.pos();
     }  
+     
 
   void entry();  
  

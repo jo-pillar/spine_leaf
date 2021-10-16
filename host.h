@@ -39,18 +39,19 @@
 
 #include "systemc.h"
 #include "pkt.h"
-struct host: sc_module {
-  const int i;
-  sc_in<pkt> pkt_in;  
-  sc_in<sc_int<4> > id;  //本机ID等于sourceid
-  int first;
 
-  sc_out<pkt> pkt_out; 
+
+struct host: sc_module {
+
+  sc_in<pkt> pkt_in;  
+  sc_in<sc_int<7> > id;  //本机ID等于sourceid 在组网时分配
+
+  int first;//忽略第一个包
+
+  sc_out<pkt> pkt_out;
   sc_in_clk CLK;
 
-  SC_CTOR(host);
-  host(sc_module_name name,int i):
-  sc_module(name),i(i)
+  SC_CTOR(host)
    {
       SC_METHOD(receiver); 
       dont_initialize();

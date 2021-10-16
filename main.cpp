@@ -39,128 +39,154 @@
 #include "systemc.h"
 #include "pkt.h"
 #include "switch_clk.h"
-#include "sender.h"
-#include "receiver.h"
 #include "switch.h"
 #include "host.h"
 #include "leaf.h"
 #include "spine.h"
+#include <vector>
+using std::vector;
 
-
-
-int
-sc_main(int, char *[])
+int sc_main(int, char *[])
 {
-  sc_signal<pkt> pkt_in[4];
- 
 
- /* sc_signal<pkt> pkt_in0;*/
-  sc_signal<pkt> pkt_in1;
-  sc_signal<pkt> pkt_in2;
-  sc_signal<pkt> pkt_in3;
-  sc_signal<pkt> pkt_out0;
-  sc_signal<pkt> pkt_out1;
-  sc_signal<pkt> pkt_out2;
-  sc_signal<pkt> pkt_out3;
+  sc_signal<bool> switch_cntrl;//控制信号
 
-  sc_signal<sc_int<4> > id0, id1, id2, id3;
-  
-  sc_signal<bool> switch_cntrl;
-
+//初始化时钟
   sc_clock clock1("CLOCK1", 75, SC_NS, 0.5, 0.0, SC_NS);
   sc_clock clock2("CLOCK2", 30, SC_NS, 0.5, 10.0, SC_NS);
 
-  // Module instiatiations follow
-  // Note that modules can be connected by hooking up ports 
-  // to signals by name or by using a positional notation
-
-  /*sender sender0("SENDER0");
-  // hooking up signals to ports by name
-  sender0.pkt_out(pkt_in[0]);
-  sender0.source_id(id0);
-  sender0.CLK(clock1);*/
- 
+ // 实例化向量变量
+  vector<sc_signal<pkt> *> pktin_vec, pktout_vec,spipktin_vec,spipktout_vec,switchpktin_vec,switchpktout_vec;
+  vector<sc_signal<sc_int<7>> *> id_vec;
+  for (int i = 0; i < HOST_NUM; i++)
+  {
+    //实例化PKT IN
+    sc_signal<pkt> *intemp = new sc_signal<pkt>;
+    pktin_vec.push_back(intemp);
+    //实例化PKTout
+    sc_signal<pkt> *outtemp = new sc_signal<pkt>;
+    pktout_vec.push_back(outtemp);
+    //初始化 id
+    sc_signal<sc_int<7>> *id_temp = new sc_signal<sc_int<7>>;
+    id_vec.push_back(id_temp);
+    sc_signal<sc_int<7>> &id_ttemp = *id_temp;
+    //指定id
+    id_ttemp.write(i);
+  }
+  for (int i = 0; i < LEAF_NUM; i++)
+  {
+     //实例化SPINE_PKT IN
+    sc_signal<pkt> *intemp = new sc_signal<pkt>;
+    spipktin_vec.push_back(intemp);
+    //实例化SPINE_PKTout
+    sc_signal<pkt> *outtemp = new sc_signal<pkt>;
+    spipktout_vec.push_back(outtemp);
+  }
+  for (int i = 0; i < SPINE_NUM; i++)
+  {
+      //实例化Switch_PKT IN
+    sc_signal<pkt> *intemp = new sc_signal<pkt>;
+    switchpktin_vec.push_back(intemp);
+    //实例化switch_PKTout
+    sc_signal<pkt> *outtemp = new sc_signal<pkt>;
+    switchpktout_vec.push_back(outtemp);
+  }
   
-  host host0("HOST0");
-  host0.pkt_out(pkt_in[0]);
-  host0.id(id0);
-  host0.CLK(clock1);
   
 
-
-  host host1("HOST1");
-  host0.pkt_out(pkt_in[1]);
-  host0.id(id0);
-  host0.CLK(clock1);
-
-    
-    host host2("HOST2");
-  host0.pkt_out(pkt_in[2]);
-  host0.id(id2);
-  host0.CLK(clock1);
-
-    
-  host host3("HOST3");
-  host0.pkt_out(pkt_in[3]);
-  host0.id(id3);
-  host0.CLK(clock1);
-leaf  leaf0("leaf0");
-leaf0.in0()
+  //实例化HOST
+  vector<host *> host_vec;
+  for (int i = 0; i < HOST_NUM; i++)
+  {
+    char Host_name = 'HOST' + char(i);
+    const char const_host_name = Host_name;
+    host temp(&const_host_name);
+    host_vec.push_back(&temp);
+  }
 
 
-  
+  //实例化 LEAF
+  vector<leaf *> leaf_vec;
+  for (int i = 0; i < LEAF_NUM; i++)
+  {
+    char Leaf_Name = 'LEAF' + char(i);
+    const char const_leaf_name = Leaf_Name;
+    leaf temp(&const_leaf_name,i);
+    leaf_vec.push_back(&temp);
+  }
+
+
+  //实例化 Spine
+  vector<spine *> spine_vec;
+  for (int i = 0; i < SPINE_NUM; i++)
+  {
+    char Spine_Name = 'SPINE' + char(i);
+    const char Const_Spine_Name = Spine_Name;
+    spine temp(&Const_Spine_Name,i);
+    spine_vec.push_back(&temp);
+  }
+
+
+  //初始化HOST并绑定leaf端口
+  for (int i = 0; i < HOST_NUM; i++)
+  {
+    host &host_temp = *host_vec[i];
+    host_temp.pkt_out(*pktin_vec[i]);
+    host_temp.pkt_in(*pktout_vec[i]);
+    host_temp.CLK(clock1);//指定时钟
+    host_temp.id(*id_vec[i]);
+    leaf &leaf_temp = *leaf_vec[i / 2];
+    if (i % 2)//host1对应in2
+    {
+      leaf_temp.in2(*pktin_vec[i]);
+      leaf_temp.out2(*pktout_vec[i]);
+    }
+    else//host0对应in1
+    {
+      leaf_temp.in1(*pktin_vec[i]);
+      leaf_temp.out1(*pktout_vec[i]);
+    }
+  }
   switch_clk switch_clk1("SWITCH_CLK");
   // hooking up signals to ports by name
   switch_clk1.switch_cntrl(switch_cntrl);
   switch_clk1.CLK(clock2);
+  //初始化LEAF绑定spine端口
+  for (int i = 0; i < LEAF_NUM; i++)
+  {
+     leaf &leaf_temp =*leaf_vec[i];
+     leaf_temp.in0(*spipktin_vec[i]);
+     leaf_temp.out0(*spipktout_vec[i]);
+     leaf_temp.switch_cntrl(switch_cntrl);
+        spine &spine_temp=*spine_vec[i/2];
+     if(i%2){//同上
+       spine_temp.out2(*spipktout_vec[i]);
+       spine_temp.in2(*spipktin_vec[i]);
+     }else{
+        spine_temp.out1(*spipktout_vec[i]);
+       spine_temp.in1(*spipktin_vec[i]);
+     }
+  }
+    mcast_pkt_switch switch1("SWITCH");
+  for (int i = 0; i < SPINE_NUM; i++)
+  {
+    spine &spine_temp=*spine_vec[i];
+    spine_temp.in0(*switchpktout_vec[i]);
+    spine_temp.out0(*switchpktin_vec[i]);
+    spine_temp.switch_cntrl(switch_cntrl);
+   sc_in<pkt>&in_temp= *(switch1.in_vec[i]);
+   in_temp(*switchpktin_vec[i]);
+    sc_out<pkt>&out_temp= *(switch1.out_vec[i]);
+   out_temp(*switchpktout_vec[i]);
+  }
+  
 
-  mcast_pkt_switch switch1("SWITCH");
-  // hooking up signals to ports by name
-  switch1.switch_cntrl(switch_cntrl);
-  switch1.in0(pkt_in[0]);
-  switch1.in1(pkt_in1);
-  switch1.in2(pkt_in2);
-  switch1.in3(pkt_in3);
-  switch1.out0(pkt_out0);
-  switch1.out1(pkt_out1);
-  switch1.out2(pkt_out2);
-  switch1.out3(pkt_out3);
+  
+  //初始化SPINE
+
  
-  receiver receiver0("RECEIVER0");
-  // hooking up signals to ports by name  
-  receiver0.pkt_in(pkt_out0);
-  receiver0.sink_id(id0);
 
-  receiver receiver1("RECEIVER1");
-  // hooking up signals to ports by position
-  receiver1( pkt_out1, id1 );
 
-  receiver receiver2("RECEIVER2");
-  // hooking up signals to ports by name
-  receiver2.pkt_in(pkt_out2);
-  receiver2.sink_id(id2);
-
-  receiver receiver3("RECEIVER3");
-  // hooking up signals to ports by position
-  receiver3( pkt_out3, id3 );
-
-  sc_start(0, SC_NS);
-
-#ifndef __SUNPRO_CC
-  id0.write(0); 
-  id1.write(1);
-  id2.write(2);
-  id3.write(3);
-#else
-  // you cannot do that with SC5.0
-  // since it doesn't support member templates
-  id0.write(sc_int<4>(0));
-  id0.write(sc_int<4>(1));
-  id0.write(sc_int<4>(2));
-  id0.write(sc_int<4>(3));
-#endif
   sc_start();
   return 0;
-
 }
-

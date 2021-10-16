@@ -7,16 +7,12 @@ set (CMAKE_CXX_STANDARD ${SystemC_CXX_STANDARD})
 add_executable (pkt_switch main.cpp
                            pkt.h
                            fifo.h
-                           fifo.cpp
-                           sender.h
-                           sender.cpp
+                           fifo.cpp                   
                            switch_clk.h
                            switch_clk.cpp
                            switch_reg.h
                            switch.h
                            switch.cpp
-                           receiver.h
-                           receiver.cpp
                            host.h
                            host.cpp
                            spine.h

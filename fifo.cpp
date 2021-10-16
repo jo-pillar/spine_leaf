@@ -41,21 +41,14 @@
 
     void fifo::pkt_in(const pkt& data_pkt)
     {
-      regs[pntr++] = data_pkt; empty = false;
-      if (pntr == 4) full = true;      
+      regs.push_back( data_pkt); empty = false;;      
     }
 
     pkt fifo::pkt_out()
     {
        pkt temp;
-       temp = regs[0];
-       if (--pntr == 0) empty = true;
-       else 
-	{ 
-            regs[0] = regs[1];
-	         regs[1] = regs[2];
-	         regs[2] = regs[3];
-           full=false;
-        } 
+       temp = regs.front();
+       regs.pop_front();//删除队首元素
+       if (regs.empty()) empty = true;
       return(temp);  
     }

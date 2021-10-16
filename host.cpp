@@ -49,7 +49,13 @@ void host:: receiver()
   // Ignore the first packet arriving on start-on
   if (first == 1) {first = 0;}
   else {
+  
 	temp_val = pkt_in.read();
+  if ((int)temp_val.id!=(int)id.read())
+  {
+    cout<<"目的iD与接收ID不匹配";
+  }
+  
 	cout << "                                  .........................." << endl;
 	cout << "                                  New Packet Received" << endl;
 	cout << "                                  Receiver ID: " << (int)id.read() + 1 << endl;
@@ -62,7 +68,7 @@ void host:: receiver()
 void host:: sender()
 {
    pkt pkt_data;
-   sc_uint<4> dest;//目标ID
+
 
    srand((unsigned)time(NULL));
    wait(8);
@@ -75,28 +81,19 @@ void host:: sender()
        pkt_data.id = id.read();
 
       
-       /////send it to 1 or more(<=4) destinations//////////////
-       dest = rand()%15 + 1;
-       for(int i=0;i<4;i++)
-       {
-         pkt_data.dest[i]=dest[i];
-
-       }
+       /////生成64位的hostid//////////////
+       pkt_data.dest= rand()%64+1;
+       
      
 
-       pkt_out.write(pkt_data);
+       pkt_out.write(pkt_data);//将pkt写入到输出端口
 
         cout << ".........................." << endl;
 	cout << "New Packet Sent" << endl;
-	cout << "Destination Addresses: ";
-  for(int i=0;i<10;i++)
-       {
-        if (dest[i]) cout << i+1 << " " ;
+	cout << "Destination Addresses: "<<(int)pkt_data.dest+1<<endl;
 
-       }
-        cout << endl;
 	cout << "Packet Value: " << (int)pkt_data.data << endl;
-	cout << "Sender ID: " << (int)id.read()  << endl;//取消加一
+	cout << "Sender ID: " << (int)id.read()+1  << endl;
 	cout << ".........................." << endl;      
        
        wait(); 

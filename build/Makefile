@@ -204,60 +204,6 @@ main.cpp.s:
 	$(MAKE) -f CMakeFiles/pkt_switch.dir/build.make CMakeFiles/pkt_switch.dir/main.cpp.s
 .PHONY : main.cpp.s
 
-receiver.o: receiver.cpp.o
-
-.PHONY : receiver.o
-
-# target to build an object file
-receiver.cpp.o:
-	$(MAKE) -f CMakeFiles/pkt_switch.dir/build.make CMakeFiles/pkt_switch.dir/receiver.cpp.o
-.PHONY : receiver.cpp.o
-
-receiver.i: receiver.cpp.i
-
-.PHONY : receiver.i
-
-# target to preprocess a source file
-receiver.cpp.i:
-	$(MAKE) -f CMakeFiles/pkt_switch.dir/build.make CMakeFiles/pkt_switch.dir/receiver.cpp.i
-.PHONY : receiver.cpp.i
-
-receiver.s: receiver.cpp.s
-
-.PHONY : receiver.s
-
-# target to generate assembly for a file
-receiver.cpp.s:
-	$(MAKE) -f CMakeFiles/pkt_switch.dir/build.make CMakeFiles/pkt_switch.dir/receiver.cpp.s
-.PHONY : receiver.cpp.s
-
-sender.o: sender.cpp.o
-
-.PHONY : sender.o
-
-# target to build an object file
-sender.cpp.o:
-	$(MAKE) -f CMakeFiles/pkt_switch.dir/build.make CMakeFiles/pkt_switch.dir/sender.cpp.o
-.PHONY : sender.cpp.o
-
-sender.i: sender.cpp.i
-
-.PHONY : sender.i
-
-# target to preprocess a source file
-sender.cpp.i:
-	$(MAKE) -f CMakeFiles/pkt_switch.dir/build.make CMakeFiles/pkt_switch.dir/sender.cpp.i
-.PHONY : sender.cpp.i
-
-sender.s: sender.cpp.s
-
-.PHONY : sender.s
-
-# target to generate assembly for a file
-sender.cpp.s:
-	$(MAKE) -f CMakeFiles/pkt_switch.dir/build.make CMakeFiles/pkt_switch.dir/sender.cpp.s
-.PHONY : sender.cpp.s
-
 spine.o: spine.cpp.o
 
 .PHONY : spine.o
@@ -357,12 +303,6 @@ help:
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
-	@echo "... receiver.o"
-	@echo "... receiver.i"
-	@echo "... receiver.s"
-	@echo "... sender.o"
-	@echo "... sender.i"
-	@echo "... sender.s"
 	@echo "... spine.o"
 	@echo "... spine.i"
 	@echo "... spine.s"

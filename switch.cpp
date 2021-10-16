@@ -41,79 +41,41 @@
 #include "switch.h"
 #include "fifo.h"
 #include "switch_reg.h"
-#define SIM_NUM 500
+#include <vector>
 
+
+using std::vector;
 void mcast_pkt_switch :: entry()
 {
   wait();
 
   // declarations
-  switch_reg R0;
-  switch_reg R1;
-  switch_reg R2;
-  switch_reg R3;
-  switch_reg temp;
+  vector<switch_reg> reg_vec;//实例化寄存器向量
+  vector<fifo> qin_vec,qout_vec;//实例化输出和输入队列
+  for (int i = 0; i < SPINE_NUM; i++)
+  {
+    switch_reg R_temp;
+    fifo qin_temp;
+    fifo qout_temp;
+    reg_vec.push_back(R_temp);
+    qin_vec.push_back(qin_temp);
+    qout_vec.push_back(qout_temp);
 
-  int sim_count;
-  int pkt_count;
-  int drop_count;
+  }//生成16个
 
-  fifo q0_in;
-  fifo q1_in;
-  fifo q2_in;
-  fifo q3_in;
-
-  fifo q0_out;
-  fifo q1_out;
-  fifo q2_out;
-  fifo q3_out;
-  bool zero[2]={false, false};
-   bool one[2]={false, true};
-    bool two[2]={true, false};
-     bool three[2]={true, true};
-
-  // FILE *result;
-
-  // initialization
-  pkt_count = 0;
-  drop_count = 0;
-  sim_count  = 0;
-
-  q0_in.pntr = 0;
-  q1_in.pntr = 0;
-  q2_in.pntr = 0;
-  q3_in.pntr = 0;
-
-  q0_out.pntr = 0;
-  q1_out.pntr = 0;
-  q2_out.pntr = 0;
-  q3_out.pntr = 0;
-
-  q0_in.full  = false;
-  q1_in.full  = false;
-  q2_in.full  = false;
-  q3_in.full  = false;
-
-  q0_in.empty = true;
-  q1_in.empty = true;
-  q2_in.empty = true;
-  q3_in.empty = true;
-
-  q0_out.full = false;
-  q1_out.full = false;
-  q2_out.full = false;
-  q3_out.full = false;
-
-  q0_out.empty = true;
-  q1_out.empty = true;
-  q2_out.empty = true;
-  q3_out.empty = true;
-  
-  R0.free = true;
-  R1.free = true;
-  R2.free = true;
-  R3.free = true;
-
+   for (int i = 0; i < SPINE_NUM; i++)
+  {
+    reg_vec[i].free=true;
+    qin_vec[i].empty=true;
+    qin_vec[i].full=false;
+    qin_vec[i].pntr=0;
+    qout_vec[i].empty=true;
+    qout_vec[i].full=false;
+    qout_vec[i].pntr=0;
+  }//指定初始值
+  int sim_count=0;
+  int pkt_count=0;
+  int drop_count=0;
   // result = fopen("result","w");
 
   cout << endl;
@@ -130,102 +92,46 @@ void mcast_pkt_switch :: entry()
   while( sim_count++ < SIM_NUM )
     { 
        wait();
+    
+       
+
 
        /////read input packets//////////////////////////////////     
-      if (in0.event()) 
+      
+   for (int i = 0; i < SPINE_NUM; i++)
        {
-	 pkt_count++;
-	 if (q0_in.full == true) drop_count++;
-         else q0_in.pkt_in(in0.read());
+         sc_in<pkt> &in_temp=*in_vec[i];
+
+         if (in_temp.event())//第i个spine发了包
+         {
+         pkt_count++;
+
+         qin_vec[i].pkt_in(in_temp.read());//写入qin_vec
        };  
-
-       if (in1.event()) 
-       {
-	 pkt_count++;
-	 if (q1_in.full == true) drop_count++;
-         else q1_in.pkt_in(in1.read());
-       };
-
-       if (in2.event()) 
-       {
-	 pkt_count++;
-	 if (q2_in.full == true) drop_count++;
-         else q2_in.pkt_in(in2.read());
-       };
-
-       if (in3.event()) 
-       {
-	 pkt_count++;
-	 if (q3_in.full == true) drop_count++;
-         else q3_in.pkt_in(in3.read());
-       };
-
+         }
+         
+       }
       /////move the packets from fifo to shift register ring/////
+         if((bool)switch_cntrl && switch_cntrl.event())
+	{ 
+    
+ int dest_spine;
+   for (int i = 0; i < SPINE_NUM; i++)
+   {
+     
+    if((!qin_vec[i].empty)&&reg_vec[i].free)
+    {
+     pkt temp=qin_vec[i].pkt_out();//读取包
+    dest_spine=temp.get_dest_spine();//获取目的spineid
+    qout_vec[dest_spine].pkt_in(temp);//写入对应spineid的qout
+     sc_out<pkt> &out_temp=*out_vec[dest_spine];
+    out_temp.write(qout_vec[dest_spine].pkt_out());//将包写入到对应输出端口
+
+      }
+    }
+   }
    
-      if((!q0_in.empty) && R0.free) 
-	{
-          R0.val  = q0_in.pkt_out();
-	  R0.free = false;
-	}
-
-      if((!q1_in.empty) && R1.free) 
-	{
-          R1.val  = q1_in.pkt_out();
-	  R1.free = false;
-	}
-      if((!q2_in.empty) && R2.free) 
-	{
-          R2.val  = q2_in.pkt_out();
-	  R2.free = false;
-	}
-      if((!q3_in.empty) && R3.free) 
-	{
-          R3.val  = q3_in.pkt_out();
-	  R3.free = false;
-	}
-
-      if((bool)switch_cntrl && switch_cntrl.event())
-	{
-            /////shift the channel registers /////////////////////////
-            temp = R0;
-            R0 = R1;
-	    R1 = R2;
-	    R2 = R3;
-	    R3 = temp;
-
-	    /////write the register values to output fifos////////////
-	    if ((!R0.free) && (R0.val.dest==zero) && (!q0_out.full))
-	      {
-		q0_out.pkt_in(R0.val); 
-R0.free = true;
-	      }
-
-	    if ((!R1.free) && (R1.val.dest==one) && (!q1_out.full))
-	      {
-		q1_out.pkt_in(R1.val);
-
-	 R1.free = true;
-	      }
-	    if ((!R2.free) && (R2.val.dest==two) && (!q2_out.full))
-	      {
-		q2_out.pkt_in(R2.val);
-
- R2.free = true;
-	      }
-	    if ((!R3.free) && (R3.val.dest==three) && (!q3_out.full))
-	      {
-		q3_out.pkt_in(R3.val);
-R3.free = true;
-	      }
-
-	    /////write the packets out//////////////////////////////////    
-	    if (!q0_out.empty) out0.write(q0_out.pkt_out()); 
-	    if (!q1_out.empty) out1.write(q1_out.pkt_out());
-	    if (!q2_out.empty) out2.write(q2_out.pkt_out());
-	    if (!q3_out.empty) out3.write(q3_out.pkt_out());
-	}
-    } 
-
+   
   sc_stop();
 
   cout << endl << endl << "-------------------------------------------------------------------------------" << endl;

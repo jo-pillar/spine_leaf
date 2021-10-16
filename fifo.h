@@ -40,10 +40,11 @@
 
 #include "systemc.h"
 #include "pkt.h"
+#include<deque>
 
 struct fifo {
 
-   pkt regs[4];
+   std::deque <pkt> regs;//使用deque容器
    bool full;
    bool empty;
    sc_uint<3> pntr;

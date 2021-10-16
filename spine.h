@@ -1,5 +1,5 @@
-#ifndef LEAF_H_INCLUED
-#define LEAF_H_INCLUED
+#ifndef SPINE_H_INCLUED
+#define SPINE_H_INCLUED
 #include "systemc.h"
 #include "pkt.h"
 struct spine: sc_module {
@@ -9,13 +9,15 @@ struct spine: sc_module {
     sc_in<pkt>  in2;
 
 
-    sc_out<pkt>  out0;//core端口
-    sc_out<pkt>  out1;//host0端口
-    sc_out<pkt>  out2;//host1端口
-    sc_in<sc_int<3>> leafid;// [2][1] [core_id][leaf_id]
+    sc_out<pkt>  out0;//总线端口
+    sc_out<pkt>  out1;//leaf0端口
+    sc_out<pkt>  out2;//leaf1端口
+     sc_int<ADR_NUM-3> Spineid;// [2][1] [core_id][leaf_id]
 
 
-    SC_CTOR(spine) 
+    SC_CTOR(spine);
+    spine(sc_module_name name,sc_int<ADR_NUM-3> Spineid):
+    sc_module(name),Spineid(Spineid)
      {
       SC_THREAD(entry);
       sensitive << in0;
@@ -29,4 +31,4 @@ struct spine: sc_module {
  
 };
 
-#endif //LEAF_H_INCLUED
+#endif //Spine_H_INCLUED

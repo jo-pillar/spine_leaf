@@ -3,6 +3,7 @@
 #include "systemc.h"
 #include "pkt.h"
 struct leaf: sc_module {
+    sc_in<bool>  switch_cntrl;
     sc_in<pkt>  in0;
     sc_in<pkt>  in1;
     sc_in<pkt>  in2;
@@ -11,15 +12,19 @@ struct leaf: sc_module {
     sc_out<pkt>  out0;//core端口
     sc_out<pkt>  out1;//host0端口
     sc_out<pkt>  out2;//host1端口
-    sc_in<sc_int<3>> leafid;// [2][1] [core_id][leaf_id]
+
+sc_int<ADR_NUM-2> leafid;// [2][1] [core_id][leaf_id]
 
 
-    SC_CTOR(leaf) 
+    SC_CTOR(leaf);
+    leaf(sc_module_name name,sc_int<ADR_NUM-2> leafid):
+    sc_module(name),leafid(leafid)
      {
       SC_THREAD(entry);
       sensitive << in0;
       sensitive << in1;
       sensitive << in2;
+      sensitive<<switch_cntrl.pos();
 
 
     }     
