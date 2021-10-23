@@ -39,154 +39,149 @@
 #include "systemc.h"
 #include "pkt.h"
 #include "switch_clk.h"
-#include "switch.h"
 #include "host.h"
 #include "leaf.h"
 #include "spine.h"
 #include <vector>
+#include<string>
+using std::string;
 using std::vector;
 
 int sc_main(int, char *[])
 {
 
-  sc_signal<bool> switch_cntrl;//控制信号
+const int host_port_num=HOST_NUM/LEAF_NUM;
+const int spine_port_num=SPINE_NUM;
+const int leaf_port_num= LEAF_NUM;
+//初始化时钟 参数调整
+sc_clock host_clock("host_clock", 120, SC_NS, 0.5, 60, SC_NS);
+sc_clock leaf_clock("leaf_clock", 100, SC_NS, 0.5, 0.0, SC_NS);
+sc_clock spine_clock("spine_clock", 100, SC_NS, 0.5, 0.0, SC_NS);
+switch_clk  leaf_switch_clk("LEAF_SWITCH_CLK");
+switch_clk  spine_switch_clk("SPINE_SWITCH_CLK");
+sc_signal<bool> leaf_switch_cntrl;
+sc_signal<bool> spine_switch_cntrl;
+spine_switch_clk.CLK(spine_clock);
+spine_switch_clk.switch_cntrl(spine_switch_cntrl);
+leaf_switch_clk.CLK(leaf_clock);
+leaf_switch_clk.switch_cntrl(leaf_switch_cntrl);
 
-//初始化时钟
-  sc_clock clock1("CLOCK1", 75, SC_NS, 0.5, 0.0, SC_NS);
-  sc_clock clock2("CLOCK2", 30, SC_NS, 0.5, 10.0, SC_NS);
+//实例化 信号向量变量
+ vector<sc_signal<pkt> *> host_signal_in,host_signal_out;//host--leaf 信号 in out 相对host 而言
 
- // 实例化向量变量
-  vector<sc_signal<pkt> *> pktin_vec, pktout_vec,spipktin_vec,spipktout_vec,switchpktin_vec,switchpktout_vec;
-  vector<sc_signal<sc_int<7>> *> id_vec;
-  for (int i = 0; i < HOST_NUM; i++)
-  {
-    //实例化PKT IN
-    sc_signal<pkt> *intemp = new sc_signal<pkt>;
-    pktin_vec.push_back(intemp);
+vector<sc_signal<pkt> *>spine_signal_in,spine_signal_out;//spine--leaf 信号 in out 相对spine 而言
+
+// 
+for (int i = 0; i < HOST_NUM ; i++)
+{
+   sc_signal<pkt> *intemp = new sc_signal<pkt>;
+    host_signal_in.push_back(intemp);
     //实例化PKTout
     sc_signal<pkt> *outtemp = new sc_signal<pkt>;
-    pktout_vec.push_back(outtemp);
-    //初始化 id
-    sc_signal<sc_int<7>> *id_temp = new sc_signal<sc_int<7>>;
-    id_vec.push_back(id_temp);
-    sc_signal<sc_int<7>> &id_ttemp = *id_temp;
+    host_signal_out.push_back(outtemp);
+}
+
+
+for (int i = 0; i < LEAF_NUM*SPINE_NUM; i++)
+{
+ sc_signal<pkt> *intemp = new sc_signal<pkt>;
+    spine_signal_in.push_back(intemp);
+    //实例化PKTout
+    sc_signal<pkt> *outtemp = new sc_signal<pkt>;
+    spine_signal_out.push_back(outtemp);
+}
+
+// id地址
+vector<sc_signal<sc_int<ADR_NUM>> *> id_signal;
+for (int i = 0; i < HOST_NUM ; i++)
+{sc_signal<sc_int<ADR_NUM>> *id_temp = new sc_signal<sc_int<ADR_NUM>>;
+    id_signal.push_back(id_temp);
+    sc_signal<sc_int<ADR_NUM>> &id_ttemp = *id_temp;
     //指定id
     id_ttemp.write(i);
-  }
-  for (int i = 0; i < LEAF_NUM; i++)
-  {
-     //实例化SPINE_PKT IN
-    sc_signal<pkt> *intemp = new sc_signal<pkt>;
-    spipktin_vec.push_back(intemp);
-    //实例化SPINE_PKTout
-    sc_signal<pkt> *outtemp = new sc_signal<pkt>;
-    spipktout_vec.push_back(outtemp);
-  }
-  for (int i = 0; i < SPINE_NUM; i++)
-  {
-      //实例化Switch_PKT IN
-    sc_signal<pkt> *intemp = new sc_signal<pkt>;
-    switchpktin_vec.push_back(intemp);
-    //实例化switch_PKTout
-    sc_signal<pkt> *outtemp = new sc_signal<pkt>;
-    switchpktout_vec.push_back(outtemp);
-  }
-  
-  
+}
 
-  //实例化HOST
+
+//实例化HOST
   vector<host *> host_vec;
   for (int i = 0; i < HOST_NUM; i++)
   {
-    char Host_name = 'HOST' + char(i);
-    const char const_host_name = Host_name;
-    host temp(&const_host_name);
-    host_vec.push_back(&temp);
+    string host_name = "HOST";
+    string i_str=to_string(i);
+    host_name=host_name+i_str;
+    host *temp=new host(host_name.c_str());
+    temp->id(*id_signal[i]);
+    host_vec.push_back(temp);
+
   }
 
-
-  //实例化 LEAF
-  vector<leaf *> leaf_vec;
+  //实例化leaf
+ vector<leaf *> leaf_vec;
   for (int i = 0; i < LEAF_NUM; i++)
   {
-    char Leaf_Name = 'LEAF' + char(i);
-    const char const_leaf_name = Leaf_Name;
-    leaf temp(&const_leaf_name,i);
-    leaf_vec.push_back(&temp);
+    sc_int<LEAF_IP_NUM> leaf_ip=i;
+        string leaf_name = "LEAF";
+    string i_str=to_string(i);
+    leaf_name=leaf_name+i_str;
+    leaf *temp=new leaf(leaf_name.c_str(),leaf_ip,spine_port_num,leaf_port_num);
+    temp->switch_cntrl(leaf_switch_cntrl);
+    leaf_vec.push_back(temp);
   }
-
-
-  //实例化 Spine
-  vector<spine *> spine_vec;
+  // 实例化spine
+  vector<spine *>spine_vec;
   for (int i = 0; i < SPINE_NUM; i++)
   {
-    char Spine_Name = 'SPINE' + char(i);
-    const char Const_Spine_Name = Spine_Name;
-    spine temp(&Const_Spine_Name,i);
-    spine_vec.push_back(&temp);
+    sc_int<SPINE_IP_NUM> spine_ip=i;
+    string spine_name = "spine";
+    string i_str=to_string(i);
+    spine_name=spine_name+i_str;
+    spine *temp=new spine(spine_name.c_str(),spine_ip,leaf_port_num);
+    temp->switch_cntrl(spine_switch_cntrl);
+    spine_vec.push_back(temp);
   }
+   //初始化HOST并绑定leaf端口
+ 
 
-
-  //初始化HOST并绑定leaf端口
   for (int i = 0; i < HOST_NUM; i++)
   {
-    host &host_temp = *host_vec[i];
-    host_temp.pkt_out(*pktin_vec[i]);
-    host_temp.pkt_in(*pktout_vec[i]);
-    host_temp.CLK(clock1);//指定时钟
-    host_temp.id(*id_vec[i]);
-    leaf &leaf_temp = *leaf_vec[i / 2];
-    if (i % 2)//host1对应in2
-    {
-      leaf_temp.in2(*pktin_vec[i]);
-      leaf_temp.out2(*pktout_vec[i]);
-    }
-    else//host0对应in1
-    {
-      leaf_temp.in1(*pktin_vec[i]);
-      leaf_temp.out1(*pktout_vec[i]);
-    }
+    int leaf_id=0;// host 对应的leaf
+    int leaf_port_id=0;// host 对应的leaf 的host 口编号
+    host &host_temp = *host_vec[i];//第i个host
+    host_temp.pkt_out(*host_signal_out[i]);
+    host_temp.pkt_in(*host_signal_in[i]);
+
+    host_temp.CLK(host_clock);//指定时钟
+    host_temp.id(*id_signal[i]);
+    leaf_port_id=i%host_port_num;
+    leaf_id=i/host_port_num;
+    leaf &leaf_temp =*(leaf_vec[leaf_id]);
+    sc_in<pkt> port_in_temp=*leaf_temp.host_port_in[leaf_port_id];
+    port_in_temp(*host_signal_out[i]);
+    sc_out<pkt> port_out_temp=*leaf_temp.host_port_out[leaf_port_id];
+    port_out_temp(*host_signal_in[i]);  
   }
-  switch_clk switch_clk1("SWITCH_CLK");
-  // hooking up signals to ports by name
-  switch_clk1.switch_cntrl(switch_cntrl);
-  switch_clk1.CLK(clock2);
-  //初始化LEAF绑定spine端口
-  for (int i = 0; i < LEAF_NUM; i++)
-  {
-     leaf &leaf_temp =*leaf_vec[i];
-     leaf_temp.in0(*spipktin_vec[i]);
-     leaf_temp.out0(*spipktout_vec[i]);
-     leaf_temp.switch_cntrl(switch_cntrl);
-        spine &spine_temp=*spine_vec[i/2];
-     if(i%2){//同上
-       spine_temp.out2(*spipktout_vec[i]);
-       spine_temp.in2(*spipktin_vec[i]);
-     }else{
-        spine_temp.out1(*spipktout_vec[i]);
-       spine_temp.in1(*spipktin_vec[i]);
-     }
-  }
-    mcast_pkt_switch switch1("SWITCH");
+  // 初始化spine 并绑定端口
   for (int i = 0; i < SPINE_NUM; i++)
   {
     spine &spine_temp=*spine_vec[i];
-    spine_temp.in0(*switchpktout_vec[i]);
-    spine_temp.out0(*switchpktin_vec[i]);
-    spine_temp.switch_cntrl(switch_cntrl);
-   sc_in<pkt>&in_temp= *(switch1.in_vec[i]);
-   in_temp(*switchpktin_vec[i]);
-    sc_out<pkt>&out_temp= *(switch1.out_vec[i]);
-   out_temp(*switchpktout_vec[i]);
+
+    for (int j = 0; j < leaf_port_num; j++)
+    {
+       sc_in<pkt> port_in_temp=*spine_temp.leaf_port_in[j];
+       sc_out<pkt> port_out_temp=*spine_temp.leaf_port_out[j];
+       int signal_id=i*leaf_port_num+j;
+       port_in_temp(*spine_signal_in[signal_id]);
+       port_out_temp(*spine_signal_out[signal_id]);
+       leaf &leaf_temp =*(leaf_vec[j]);
+       sc_in<pkt> spine_port_in_temp=*leaf_temp.spine_port_in[i];
+        sc_out<pkt> spine_port_out_temp=*leaf_temp.spine_port_out[i];
+        spine_port_in_temp(*spine_signal_out[signal_id]);
+        spine_port_out_temp(*spine_signal_out[signal_id]);
+
+    } 
   }
   
-
-  
-  //初始化SPINE
-
- 
-
-
+  // 初始化LEAF 并绑定端口 host_port_num个host，spine_port_num个spine
   sc_start();
   return 0;
 }

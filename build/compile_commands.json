@@ -16,11 +16,6 @@
 },
 {
   "directory": "/home/jo_pillar/studydirectory/pkt_switch/build",
-  "command": "/bin/g++-9   -isystem /home/jo_pillar/workdirectory/systemc-2.3.3/src  -g   -pthread -std=gnu++11 -o CMakeFiles/pkt_switch.dir/switch.cpp.o -c /home/jo_pillar/studydirectory/pkt_switch/switch.cpp",
-  "file": "/home/jo_pillar/studydirectory/pkt_switch/switch.cpp"
-},
-{
-  "directory": "/home/jo_pillar/studydirectory/pkt_switch/build",
   "command": "/bin/g++-9   -isystem /home/jo_pillar/workdirectory/systemc-2.3.3/src  -g   -pthread -std=gnu++11 -o CMakeFiles/pkt_switch.dir/host.cpp.o -c /home/jo_pillar/studydirectory/pkt_switch/host.cpp",
   "file": "/home/jo_pillar/studydirectory/pkt_switch/host.cpp"
 },
@@ -28,5 +23,10 @@
   "directory": "/home/jo_pillar/studydirectory/pkt_switch/build",
   "command": "/bin/g++-9   -isystem /home/jo_pillar/workdirectory/systemc-2.3.3/src  -g   -pthread -std=gnu++11 -o CMakeFiles/pkt_switch.dir/spine.cpp.o -c /home/jo_pillar/studydirectory/pkt_switch/spine.cpp",
   "file": "/home/jo_pillar/studydirectory/pkt_switch/spine.cpp"
+},
+{
+  "directory": "/home/jo_pillar/studydirectory/pkt_switch/build",
+  "command": "/bin/g++-9   -isystem /home/jo_pillar/workdirectory/systemc-2.3.3/src  -g   -pthread -std=gnu++11 -o CMakeFiles/pkt_switch.dir/leaf.cpp.o -c /home/jo_pillar/studydirectory/pkt_switch/leaf.cpp",
+  "file": "/home/jo_pillar/studydirectory/pkt_switch/leaf.cpp"
 }
 ]

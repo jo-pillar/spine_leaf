@@ -42,102 +42,88 @@
 #include "fifo.h"
 #include "switch_reg.h"
 
+spine::spine(sc_module_name name, sc_int<SPINE_IP_NUM> spine_ip, int leaf_port_num) : sc_module(name),
+                                                                                      spine_ip(spine_ip),
+                                                                                      leaf_port_num(leaf_port_num)
+{
+  for (int i = 0; i < leaf_port_num; i++)
+  {
+    sc_in<pkt> *in_temp = new sc_in<pkt>;
+    sc_out<pkt> *out_temp = new sc_out<pkt>;
+    leaf_port_in.push_back(in_temp);
+    leaf_port_out.push_back(out_temp);
+  }
+  SC_THREAD(entry);
+  sensitive << switch_cntrl.pos();
+  for (int i = 0; i < leaf_port_num; i++)
+  {
+    sensitive << *leaf_port_in[i];
+  }
+}
 
-void spine ::entry()
+// 析构函数
+spine::~spine()
+{
+  leaf_port_in.~vector();
+  leaf_port_out.~vector();
+}
+
+//入口函数
+void spine::entry()
 {
   wait();
-  pkt Pkt_Temp;
-
-  // result = fopen("result","w");
-
-  /* cout << endl;
-   cout << "-------------------------------------------------------------------------------" << endl;
-   cout << endl << "             LEAF Switch Simulation" << endl;
-   cout << "-------------------------------------------------------------------------------" << endl;
-   cout << "  This is the simulation of a 4x4 non-blocking multicast helix packet switch.  " << endl;
-   cout << "  The switch uses a self-routing ring of shift registers to transfer cells     " << endl;
-   cout << "  from one port to another in a pipelined fashion, resolving output contention " << endl;
-   cout << "  and handling multicast switch efficiently." << endl << endl;
-  */
-  wait();
-  // functionality
-  if (in0.event()) // received pkt from core
+  // int pkt_count=0//计数
+  vector<fifo> leaf_qin, leaf_qout;
+  for (int i = 0; i < leaf_port_num; i++)
   {
-    Pkt_Temp = in0.read();
-    bool Spine_flag = false;
-    
-    for (int i = 0; i < ADR_NUM - 3; i++)
-    {
-      Spine_flag = Spine_flag && (Pkt_Temp.dest[i] == Spineid[i]);
-    }
-    if (!Spine_flag)
-    {
-      out0.write(Pkt_Temp);
-    } //前4位不同说明不是目的节点 继续发往总线
-    if (Spine_flag)
-    {
-      if (!Pkt_Temp.dest[ADR_NUM - 2])
-      {
-        out1.write(Pkt_Temp); //发给leaf0
-      }
-
-      else
-      {
-        out2.write(Pkt_Temp);
-      }
-    }
+    fifo qin_temp;
+    fifo qout_temp;
+    leaf_qin.push_back(qin_temp);
+    leaf_qout.push_back(qout_temp);
   }
-
-  if (in1.event()) // received pkt from leaf1
+  while (true)
   {
-    Pkt_Temp = in0.read();
-    bool Spine_flag = false;
-    for (int i = 0; i < ADR_NUM - 3; i++)
-    {
-      Spine_flag = Spine_flag && (Pkt_Temp.dest[i] == Spineid[i]);
-    }
-    if (!Spine_flag)
-    {
-      out0.write(Pkt_Temp);
-    } //前4位不同说明不是目的节点 继续发往总线
-    if (Spine_flag)
-    {
-      if (!Pkt_Temp.dest[ADR_NUM - 2])
-      {
-        out1.write(Pkt_Temp); //发给leaf0
-      }
+    wait();
 
-      else
+    //读取leaf 口
+    for (int i = 0; i < leaf_port_num; i++)
+    {
+      sc_in<pkt> &in_temp = *leaf_port_in[i];
+      if (in_temp.event())
       {
-        out2.write(Pkt_Temp);
+        // pkt_count++;// 计数
+        leaf_qin[i].pkt_in(in_temp.read());
       }
     }
-  }
 
-  if (in2.event()) // received pkt from host1
-  {
-    Pkt_Temp = in0.read();
-    bool Spine_flag = false;
-    for (int i = 0; i < ADR_NUM - 3; i++)
+    // leaf 发往leaf
+    int dest_leaf = 0; //目的leaf dest_leaf=dest/(leaf_NUM/LEAF_NUM)
+    for (int i = 0; i < leaf_port_num; i++)
     {
-      Spine_flag = Spine_flag && (Pkt_Temp.dest[i] == Spineid[i]);
-    }
-    if (!Spine_flag)
-    {
-      out0.write(Pkt_Temp);
-    } //前五位不同说明不是目的节点 继续发往总线
-    //倒数第二位id
-    if (Spine_flag)
-    {
-      if (!Pkt_Temp.dest[ADR_NUM - 2])
-      {
-        out1.write(Pkt_Temp); //发给leaf0
-      }
 
-      else
+      while (!leaf_qin[i].empty)
       {
-        out2.write(Pkt_Temp);
+        pkt leaf_pkt = leaf_qin[i].pkt_out();
+        dest_leaf = leaf_pkt.dest / (HOST_NUM / LEAF_NUM);
+
+        //注入Spine ip
+        for (int j = 0; j < SPINE_IP_NUM; j++)
+        {
+          leaf_pkt.data[j] = spine_ip[j];
+        }
+
+        leaf_qout[dest_leaf].pkt_in(leaf_pkt);
+        // 发包
+        if ((bool)switch_cntrl && switch_cntrl.event())
+        {
+          if (!leaf_qout[dest_leaf].empty)
+          {
+            sc_out<pkt> &out_temp = *leaf_port_out[i];
+            out_temp.write(leaf_qout[dest_leaf].pkt_out());
+          }
+        }
       }
     }
+
   }
 }

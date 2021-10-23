@@ -32,6 +32,18 @@ systemc.h
 pkt.h
 /home/jo_pillar/studydirectory/pkt_switch/pkt.h
 
+/home/jo_pillar/studydirectory/pkt_switch/leaf.cpp
+systemc.h
+/home/jo_pillar/studydirectory/pkt_switch/systemc.h
+pkt.h
+/home/jo_pillar/studydirectory/pkt_switch/pkt.h
+leaf.h
+/home/jo_pillar/studydirectory/pkt_switch/leaf.h
+fifo.h
+/home/jo_pillar/studydirectory/pkt_switch/fifo.h
+switch_reg.h
+/home/jo_pillar/studydirectory/pkt_switch/switch_reg.h
+
 /home/jo_pillar/studydirectory/pkt_switch/leaf.h
 systemc.h
 /home/jo_pillar/studydirectory/pkt_switch/systemc.h
@@ -45,8 +57,6 @@ pkt.h
 /home/jo_pillar/studydirectory/pkt_switch/pkt.h
 switch_clk.h
 /home/jo_pillar/studydirectory/pkt_switch/switch_clk.h
-switch.h
-/home/jo_pillar/studydirectory/pkt_switch/switch.h
 host.h
 /home/jo_pillar/studydirectory/pkt_switch/host.h
 leaf.h
@@ -54,6 +64,8 @@ leaf.h
 spine.h
 /home/jo_pillar/studydirectory/pkt_switch/spine.h
 vector
+-
+string
 -
 
 /home/jo_pillar/studydirectory/pkt_switch/pkt.h
@@ -79,28 +91,6 @@ systemc.h
 /home/jo_pillar/studydirectory/pkt_switch/systemc.h
 pkt.h
 /home/jo_pillar/studydirectory/pkt_switch/pkt.h
-
-/home/jo_pillar/studydirectory/pkt_switch/switch.cpp
-systemc.h
-/home/jo_pillar/studydirectory/pkt_switch/systemc.h
-pkt.h
-/home/jo_pillar/studydirectory/pkt_switch/pkt.h
-switch.h
-/home/jo_pillar/studydirectory/pkt_switch/switch.h
-fifo.h
-/home/jo_pillar/studydirectory/pkt_switch/fifo.h
-switch_reg.h
-/home/jo_pillar/studydirectory/pkt_switch/switch_reg.h
-vector
--
-
-/home/jo_pillar/studydirectory/pkt_switch/switch.h
-systemc.h
-/home/jo_pillar/studydirectory/pkt_switch/systemc.h
-pkt.h
-/home/jo_pillar/studydirectory/pkt_switch/pkt.h
-vector
--
 
 /home/jo_pillar/studydirectory/pkt_switch/switch_clk.h
 systemc.h

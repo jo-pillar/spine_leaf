@@ -96,22 +96,9 @@ CMakeFiles/pkt_switch.dir/switch_clk.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/pkt_switch.dir/switch_clk.cpp.s"
 	/bin/g++-9 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/jo_pillar/studydirectory/pkt_switch/switch_clk.cpp -o CMakeFiles/pkt_switch.dir/switch_clk.cpp.s
 
-CMakeFiles/pkt_switch.dir/switch.cpp.o: CMakeFiles/pkt_switch.dir/flags.make
-CMakeFiles/pkt_switch.dir/switch.cpp.o: ../switch.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jo_pillar/studydirectory/pkt_switch/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/pkt_switch.dir/switch.cpp.o"
-	/bin/g++-9  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/pkt_switch.dir/switch.cpp.o -c /home/jo_pillar/studydirectory/pkt_switch/switch.cpp
-
-CMakeFiles/pkt_switch.dir/switch.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/pkt_switch.dir/switch.cpp.i"
-	/bin/g++-9 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/jo_pillar/studydirectory/pkt_switch/switch.cpp > CMakeFiles/pkt_switch.dir/switch.cpp.i
-
-CMakeFiles/pkt_switch.dir/switch.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/pkt_switch.dir/switch.cpp.s"
-	/bin/g++-9 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/jo_pillar/studydirectory/pkt_switch/switch.cpp -o CMakeFiles/pkt_switch.dir/switch.cpp.s
-
 CMakeFiles/pkt_switch.dir/host.cpp.o: CMakeFiles/pkt_switch.dir/flags.make
 CMakeFiles/pkt_switch.dir/host.cpp.o: ../host.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jo_pillar/studydirectory/pkt_switch/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/pkt_switch.dir/host.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jo_pillar/studydirectory/pkt_switch/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/pkt_switch.dir/host.cpp.o"
 	/bin/g++-9  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/pkt_switch.dir/host.cpp.o -c /home/jo_pillar/studydirectory/pkt_switch/host.cpp
 
 CMakeFiles/pkt_switch.dir/host.cpp.i: cmake_force
@@ -124,7 +111,7 @@ CMakeFiles/pkt_switch.dir/host.cpp.s: cmake_force
 
 CMakeFiles/pkt_switch.dir/spine.cpp.o: CMakeFiles/pkt_switch.dir/flags.make
 CMakeFiles/pkt_switch.dir/spine.cpp.o: ../spine.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jo_pillar/studydirectory/pkt_switch/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/pkt_switch.dir/spine.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jo_pillar/studydirectory/pkt_switch/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/pkt_switch.dir/spine.cpp.o"
 	/bin/g++-9  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/pkt_switch.dir/spine.cpp.o -c /home/jo_pillar/studydirectory/pkt_switch/spine.cpp
 
 CMakeFiles/pkt_switch.dir/spine.cpp.i: cmake_force
@@ -135,14 +122,27 @@ CMakeFiles/pkt_switch.dir/spine.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/pkt_switch.dir/spine.cpp.s"
 	/bin/g++-9 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/jo_pillar/studydirectory/pkt_switch/spine.cpp -o CMakeFiles/pkt_switch.dir/spine.cpp.s
 
+CMakeFiles/pkt_switch.dir/leaf.cpp.o: CMakeFiles/pkt_switch.dir/flags.make
+CMakeFiles/pkt_switch.dir/leaf.cpp.o: ../leaf.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jo_pillar/studydirectory/pkt_switch/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/pkt_switch.dir/leaf.cpp.o"
+	/bin/g++-9  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/pkt_switch.dir/leaf.cpp.o -c /home/jo_pillar/studydirectory/pkt_switch/leaf.cpp
+
+CMakeFiles/pkt_switch.dir/leaf.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/pkt_switch.dir/leaf.cpp.i"
+	/bin/g++-9 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/jo_pillar/studydirectory/pkt_switch/leaf.cpp > CMakeFiles/pkt_switch.dir/leaf.cpp.i
+
+CMakeFiles/pkt_switch.dir/leaf.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/pkt_switch.dir/leaf.cpp.s"
+	/bin/g++-9 $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/jo_pillar/studydirectory/pkt_switch/leaf.cpp -o CMakeFiles/pkt_switch.dir/leaf.cpp.s
+
 # Object files for target pkt_switch
 pkt_switch_OBJECTS = \
 "CMakeFiles/pkt_switch.dir/main.cpp.o" \
 "CMakeFiles/pkt_switch.dir/fifo.cpp.o" \
 "CMakeFiles/pkt_switch.dir/switch_clk.cpp.o" \
-"CMakeFiles/pkt_switch.dir/switch.cpp.o" \
 "CMakeFiles/pkt_switch.dir/host.cpp.o" \
-"CMakeFiles/pkt_switch.dir/spine.cpp.o"
+"CMakeFiles/pkt_switch.dir/spine.cpp.o" \
+"CMakeFiles/pkt_switch.dir/leaf.cpp.o"
 
 # External object files for target pkt_switch
 pkt_switch_EXTERNAL_OBJECTS =
@@ -150,9 +150,9 @@ pkt_switch_EXTERNAL_OBJECTS =
 pkt_switch: CMakeFiles/pkt_switch.dir/main.cpp.o
 pkt_switch: CMakeFiles/pkt_switch.dir/fifo.cpp.o
 pkt_switch: CMakeFiles/pkt_switch.dir/switch_clk.cpp.o
-pkt_switch: CMakeFiles/pkt_switch.dir/switch.cpp.o
 pkt_switch: CMakeFiles/pkt_switch.dir/host.cpp.o
 pkt_switch: CMakeFiles/pkt_switch.dir/spine.cpp.o
+pkt_switch: CMakeFiles/pkt_switch.dir/leaf.cpp.o
 pkt_switch: CMakeFiles/pkt_switch.dir/build.make
 pkt_switch: /home/jo_pillar/workdirectory/systemc-2.3.3/src/libsystemc.so.2.3.3
 pkt_switch: CMakeFiles/pkt_switch.dir/link.txt

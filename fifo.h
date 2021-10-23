@@ -47,7 +47,7 @@ struct fifo {
    std::deque <pkt> regs;//使用deque容器
    bool full;
    bool empty;
-   sc_uint<3> pntr;
+
   
    // constructor
 
@@ -55,7 +55,6 @@ struct fifo {
     {
       full = false;
       empty = true;
-      pntr = 0;
     }
 
   // methods

@@ -40,33 +40,23 @@
 #include "systemc.h"
 #include "pkt.h"
 
+using namespace std;
+using namespace sc_core;
 
-struct host: sc_module {
+struct host : public sc_module 
+{
 
-  sc_in<pkt> pkt_in;  
-  sc_in<sc_int<7> > id;  //本机ID等于sourceid 在组网时分配
-
-  int first;//忽略第一个包
-
+  sc_in<pkt> pkt_in;
+  
   sc_out<pkt> pkt_out;
+  sc_in<sc_int<ADR_NUM> > id;  //本机ID等于sourceid 在组网时分配
+
   sc_in_clk CLK;
 
-  SC_CTOR(host)
-   {
-      SC_METHOD(receiver); 
-      dont_initialize();
-      sensitive << pkt_in;
-      first = 1;
-      SC_CTHREAD(sender, CLK.pos()); 
+ SC_HAS_PROCESS(host);
+ host(sc_module_name name);
 
-    }  
  void receiver();
  void sender();
 };
-
-
-
-
-
-
 #endif // HOST_H_INCLUDED

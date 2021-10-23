@@ -122,7 +122,7 @@ void mcast_pkt_switch :: entry()
     if((!qin_vec[i].empty)&&reg_vec[i].free)
     {
      pkt temp=qin_vec[i].pkt_out();//读取包
-    dest_spine=temp.get_dest_spine();//获取目的spineid
+    dest_spine=temp.dest.range(SPINE_IP_NUM-1,0);//获取目的spineid
     qout_vec[dest_spine].pkt_in(temp);//写入对应spineid的qout
      sc_out<pkt> &out_temp=*out_vec[dest_spine];
     out_temp.write(qout_vec[dest_spine].pkt_out());//将包写入到对应输出端口

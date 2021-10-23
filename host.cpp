@@ -40,29 +40,51 @@
 #include <stdlib.h>
 #include <time.h>
 #include "host.h"
+host::host(sc_module_name name) :
+sc_module(name)
+   {
+      SC_METHOD(receiver); 
+      dont_initialize();
+      sensitive << pkt_in;
+      SC_CTHREAD(sender, CLK.pos()); 
 
+    }  
+    
 void host:: receiver()
 {
 
 
  pkt temp_val;
   // Ignore the first packet arriving on start-on
-  if (first == 1) {first = 0;}
-  else {
+
   
 	temp_val = pkt_in.read();
+   // 获取Spine ip
+  int spine=0;//若改使用SC_INT类型请务必检查是否输出值是否为-1;
+ spine=temp_val.data.range(SPINE_IP_NUM-1,0);
+   
+   // 获取第一次Leaf ip
+  int leaf=0;//若改使用SC_INT类型请务必检查是否输出值是否为-1;
+    leaf =temp_val.data.range(SPINE_IP_NUM + LEAF_IP_NUM-1,SPINE_IP_NUM);
+
+  // 获取第二次Leaf ip
+    int leaf2=0;//若改使用SC_INT类型请务必检查是否输出值是否为-1;
+    leaf2 =temp_val.data.range((SPINE_IP_NUM + LEAF_IP_NUM*2)-1,SPINE_IP_NUM + LEAF_IP_NUM);
   if ((int)temp_val.id!=(int)id.read())
   {
     cout<<"目的iD与接收ID不匹配";
   }
+
+
   
 	cout << "                                  .........................." << endl;
 	cout << "                                  New Packet Received" << endl;
-	cout << "                                  Receiver ID: " << (int)id.read() + 1 << endl;
+	cout << "                                  Receiver ID: " << (int)id.read()  << endl;
 	cout << "                                  Packet Value: " << (int)temp_val.data << endl;
 	cout << "                                  Sender ID: " << (int)temp_val.id  << endl;//取消加一
+  cout << "                                  Path：Leaf:"<<leaf<<"Spine: "<<spine<<"Leaf2: "<<leaf2<<endl;
 	cout << "                                  .........................." << endl;
-   } 
+   
 
 }
 void host:: sender()
@@ -75,14 +97,14 @@ void host:: sender()
    while(true)
      {
        /////generate an 8-bit random value for data//////////
-       pkt_data.data = rand()%255;
+       pkt_data.data = rand()%DATA_RANGE;
 
        ////stamp the sender's id
        pkt_data.id = id.read();
 
       
-       /////生成64位的hostid//////////////
-       pkt_data.dest= rand()%64+1;
+       /////生成64的hostid//////////////
+       pkt_data.dest= rand()%(2<<ADR_NUM);
        
      
 
@@ -90,10 +112,10 @@ void host:: sender()
 
         cout << ".........................." << endl;
 	cout << "New Packet Sent" << endl;
-	cout << "Destination Addresses: "<<(int)pkt_data.dest+1<<endl;
+	cout << "Destination Addresses: "<<(int)pkt_data.dest<<endl;
 
 	cout << "Packet Value: " << (int)pkt_data.data << endl;
-	cout << "Sender ID: " << (int)id.read()+1  << endl;
+	cout << "Sender ID: " << (int)id.read()  << endl;
 	cout << ".........................." << endl;      
        
        wait(); 
