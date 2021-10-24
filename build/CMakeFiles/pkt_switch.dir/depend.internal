@@ -308,7 +308,6 @@ CMakeFiles/pkt_switch.dir/leaf.cpp.o
  /home/jo_pillar/studydirectory/pkt_switch/leaf.cpp
  /home/jo_pillar/studydirectory/pkt_switch/leaf.h
  /home/jo_pillar/studydirectory/pkt_switch/pkt.h
- /home/jo_pillar/studydirectory/pkt_switch/switch_reg.h
  /home/jo_pillar/workdirectory/systemc-2.3.3/src/sysc/communication/sc_buffer.h
  /home/jo_pillar/workdirectory/systemc-2.3.3/src/sysc/communication/sc_clock.h
  /home/jo_pillar/workdirectory/systemc-2.3.3/src/sysc/communication/sc_clock_ports.h
@@ -615,7 +614,6 @@ CMakeFiles/pkt_switch.dir/spine.cpp.o
  /home/jo_pillar/studydirectory/pkt_switch/pkt.h
  /home/jo_pillar/studydirectory/pkt_switch/spine.cpp
  /home/jo_pillar/studydirectory/pkt_switch/spine.h
- /home/jo_pillar/studydirectory/pkt_switch/switch_reg.h
  /home/jo_pillar/workdirectory/systemc-2.3.3/src/sysc/communication/sc_buffer.h
  /home/jo_pillar/workdirectory/systemc-2.3.3/src/sysc/communication/sc_clock.h
  /home/jo_pillar/workdirectory/systemc-2.3.3/src/sysc/communication/sc_clock_ports.h

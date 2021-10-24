@@ -10,7 +10,7 @@ add_executable (pkt_switch main.cpp
                            fifo.cpp                   
                            switch_clk.h
                            switch_clk.cpp
-                          
+                          switch_reg.h
                            host.h
                            host.cpp
                            spine.h

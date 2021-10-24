@@ -18,14 +18,6 @@ pkt.h
 deque
 -
 
-/home/jo_pillar/studydirectory/pkt_switch/host.cpp
-stdlib.h
--
-time.h
--
-host.h
-/home/jo_pillar/studydirectory/pkt_switch/host.h
-
 /home/jo_pillar/studydirectory/pkt_switch/host.h
 systemc.h
 /home/jo_pillar/studydirectory/pkt_switch/systemc.h
@@ -95,10 +87,6 @@ pkt.h
 /home/jo_pillar/studydirectory/pkt_switch/switch_clk.h
 systemc.h
 /home/jo_pillar/studydirectory/pkt_switch/systemc.h
-
-/home/jo_pillar/studydirectory/pkt_switch/switch_reg.h
-pkt.h
-/home/jo_pillar/studydirectory/pkt_switch/pkt.h
 
 /home/jo_pillar/workdirectory/systemc-2.3.3/src/sysc/communication/sc_buffer.h
 sysc/communication/sc_signal.h

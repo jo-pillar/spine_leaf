@@ -307,7 +307,6 @@ CMakeFiles/pkt_switch.dir/leaf.cpp.o: ../fifo.h
 CMakeFiles/pkt_switch.dir/leaf.cpp.o: ../leaf.cpp
 CMakeFiles/pkt_switch.dir/leaf.cpp.o: ../leaf.h
 CMakeFiles/pkt_switch.dir/leaf.cpp.o: ../pkt.h
-CMakeFiles/pkt_switch.dir/leaf.cpp.o: ../switch_reg.h
 CMakeFiles/pkt_switch.dir/leaf.cpp.o: /home/jo_pillar/workdirectory/systemc-2.3.3/src/sysc/communication/sc_buffer.h
 CMakeFiles/pkt_switch.dir/leaf.cpp.o: /home/jo_pillar/workdirectory/systemc-2.3.3/src/sysc/communication/sc_clock.h
 CMakeFiles/pkt_switch.dir/leaf.cpp.o: /home/jo_pillar/workdirectory/systemc-2.3.3/src/sysc/communication/sc_clock_ports.h
@@ -614,7 +613,6 @@ CMakeFiles/pkt_switch.dir/spine.cpp.o: ../fifo.h
 CMakeFiles/pkt_switch.dir/spine.cpp.o: ../pkt.h
 CMakeFiles/pkt_switch.dir/spine.cpp.o: ../spine.cpp
 CMakeFiles/pkt_switch.dir/spine.cpp.o: ../spine.h
-CMakeFiles/pkt_switch.dir/spine.cpp.o: ../switch_reg.h
 CMakeFiles/pkt_switch.dir/spine.cpp.o: /home/jo_pillar/workdirectory/systemc-2.3.3/src/sysc/communication/sc_buffer.h
 CMakeFiles/pkt_switch.dir/spine.cpp.o: /home/jo_pillar/workdirectory/systemc-2.3.3/src/sysc/communication/sc_clock.h
 CMakeFiles/pkt_switch.dir/spine.cpp.o: /home/jo_pillar/workdirectory/systemc-2.3.3/src/sysc/communication/sc_clock_ports.h
